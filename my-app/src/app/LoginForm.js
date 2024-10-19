@@ -4,17 +4,24 @@ import React, { useState } from 'react'
 const LoginForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [message, setMessage] = useState('')
 
   const handleSubmit = e => {
     e.preventDefault()
-    console.log('Username:', username)
-    console.log('Password:', password)
+    console.log('Form submitted')
+    if (!username || !password) {
+      setMessage('Username and password are required')
+    } else if (username === 'admin' && password === 'admin123') {
+      setMessage('Welcome!')
+    } else {
+      setMessage('Invalid username or password')
+    }
   }
 
   return (
     <div style={styles.container}>
       <h2 style={styles.heading}>Login</h2>
-      <form onSubmit={handleSubmit} style={styles.form}>
+      <form onSubmit={handleSubmit} noValidate style={styles.form}>
         <div style={styles.inputContainer}>
           <label>Username:</label>
           <input
@@ -37,9 +44,12 @@ const LoginForm = () => {
             style={styles.input}
           />
         </div>
-        <button type='submit' style={styles.button} xpath='button'>
+        <button type='submit' style={styles.button}>
           Login
         </button>
+        <div style={styles.inputContainer}>
+          {message && <p id='msg'>{message}</p>}
+        </div>
       </form>
     </div>
   )
@@ -77,9 +87,6 @@ const styles = {
     border: '1px solid #ccc',
     outline: 'none',
     transition: 'border 0.3s'
-  },
-  inputFocus: {
-    borderColor: '#007BFF'
   },
   button: {
     padding: '10px',
