@@ -54,36 +54,64 @@ pipeline {
     //     }
 
         // Set up Python environment and install dependencies
-        stage('Setup Python Environment') {
-            steps {
-                // Install required packages
-                sh '''
-                    apt update
-                    apt install -y wget gnupg2
-                    wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
-                    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
-                    apt update
-                    apt install -y google-chrome-stable python3-venv
-                '''
+        // stage('Setup Python Environment') {
+        //     steps {
+        //         // Install required packages
+        //         sh '''
+        //             apt update
+        //             apt install -y wget gnupg2
+        //             wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
+        //             echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
+        //             apt update
+        //             apt install -y google-chrome-stable python3-venv
+        //         '''
 
-                // Install ChromeDriver
-                sh '''
-                    CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
-                    CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
-                    wget https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
-                    unzip chromedriver_linux64.zip -d /usr/local/bin/
-                    chmod +x /usr/local/bin/chromedriver
-                    rm chromedriver_linux64.zip
-                '''
-
-                // Create the virtual environment
-                sh 'python3 -m venv $PYTHON_VENV'
+        //         // Create the virtual environment
+        //         sh 'python3 -m venv $PYTHON_VENV'
                 
-                // Activate the virtual environment and install dependencies
-                sh '''
-                    . $PYTHON_VENV/bin/activate
-                    pip install -r requirements.txt
-                '''
+        //         // Activate the virtual environment and install dependencies
+        //         sh '''
+        //             . $PYTHON_VENV/bin/activate
+        //             pip install -r requirements.txt
+        //         '''
+        //     }
+        // }
+
+        // Install ChromeDriver
+         stage('Install ChromeDriver') {
+            steps {
+                sh 'whoami'
+                sh 'wget -q -O /tmp/chromedriver_linux64.zip https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.99/linux64/chromedriver-linux64.zip'
+                sh 'unzip -d /tmp /tmp/chromedriver_linux64.zip'
+                sh 'ls -l /tmp'
+                sh 'ls -l /tmp/chromedriver-linux64'
+                sh 'mv /tmp/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver'                
+                sh 'echo "ChromeDriver location: $(which chromedriver)"'
+                sh 'chmod +x /usr/local/bin/chromedriver'
+                sh 'apt-get update'
+                sh 'apt-get install -y libnss3'
+                sh 'chromedriver --version'
+                sh 'wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'
+                sh 'apt-get update'
+                sh 'apt-get install -y ./google-chrome-stable_current_amd64.deb'
+                sh 'google-chrome --version'
+            }
+        }
+
+        // Build the project
+        stage('Build') {
+            steps {
+                script {
+                    sh '''
+                        #!/bin/bash
+                        export PATH="${WORKSPACE}/.local/bin:$PATH"
+                        python3 --version
+                        pip install --upgrade pip
+                        pip install -r requirements.txt
+                        pip freeze
+                        ls
+                    '''
+                }
             }
         }
 
