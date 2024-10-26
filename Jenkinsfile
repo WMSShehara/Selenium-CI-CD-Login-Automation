@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        PYTHON_VENV = 'venv'  // Virtual environment directory for Python
+        PYTHON_VENV = 'SHEHARA_venv'  // Virtual environment directory for Python
     }
 
     stages {
@@ -37,8 +37,8 @@ pipeline {
                     steps {
                         // Install python3-venv if it’s not already installed
                         sh '''
-                            sudo apt update
-                            sudo apt install -y python3-venv
+                            apt update
+                            apt install -y python3-venv
                         '''
                         // Create the virtual environment
                         sh 'python3 -m venv $PYTHON_VENV'
