@@ -33,13 +33,11 @@ pipeline {
         // Run Python Selenium tests
         stage('Run Selenium Tests') {
             steps {
-                dir('selenium_testing') {
                     // Print Python version
-                    sh 'python3 --version'  // Use 'python --version' if Python is aliased to 'python' on your system
+                    sh 'python3 --version'  // Use 'python --version' if Python is aliased to 'python' on system
                     
                     // Run Selenium tests
                     sh 'python3 -m unittest discover -s selenium_testing -p "*.py"'
-                }
             }
         }
 
