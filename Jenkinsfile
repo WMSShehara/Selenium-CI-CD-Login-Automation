@@ -33,15 +33,22 @@ pipeline {
         }
 
         // Set up Python environment and install dependencies
-        stage('Set Up Python Environment') {
-            steps {
-                // Install virtual environment if not exists and activate it
-                sh 'python3 -m venv $PYTHON_VENV'
-                sh '. $PYTHON_VENV/bin/activate'
-
-                // Install dependencies (assuming requirements.txt is present in root)
-                sh 'pip install -r requirements.txt'
-            }
+        stage('Setup Python Environment') {
+                    steps {
+                        // Install python3-venv if it’s not already installed
+                        sh '''
+                            sudo apt update
+                            sudo apt install -y python3-venv
+                        '''
+                        // Create the virtual environment
+                        sh 'python3 -m venv $PYTHON_VENV'
+                        
+                        // Activate the virtual environment and install dependencies
+                        sh '''
+                            . $PYTHON_VENV/bin/activate
+                            pip install -r requirements.txt
+                        '''
+                    }
         }
 
         // Run Python Selenium tests
