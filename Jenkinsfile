@@ -1,4 +1,5 @@
 pipeline {
+    agent any
     agent {
         docker {
             image 'python:3.9'
@@ -78,25 +79,28 @@ pipeline {
         // }
 
         // Install ChromeDriver
-         stage('Install ChromeDriver') {
+         // Install ChromeDriver
+        stage('Install ChromeDriver') {
             steps {
-                sh 'whoami'
-                sh 'wget -q -O /tmp/chromedriver_linux64.zip https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.99/linux64/chromedriver-linux64.zip'
-                sh 'unzip -d /tmp /tmp/chromedriver_linux64.zip'
-                sh 'ls -l /tmp'
-                sh 'ls -l /tmp/chromedriver-linux64'
-                sh 'mv /tmp/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver'                
-                sh 'echo "ChromeDriver location: $(which chromedriver)"'
-                sh 'chmod +x /usr/local/bin/chromedriver'
-                sh 'apt-get update'
-                sh 'apt-get install -y libnss3'
-                sh 'chromedriver --version'
-                sh 'wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'
-                sh 'apt-get update'
-                sh 'apt-get install -y ./google-chrome-stable_current_amd64.deb'
-                sh 'google-chrome --version'
+                script {
+                    // Download ChromeDriver
+                    sh '''
+                        wget -q -O /tmp/chromedriver_linux64.zip https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.99/linux64/chromedriver-linux64.zip
+                        unzip -d /tmp /tmp/chromedriver_linux64.zip
+                        mv /tmp/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
+                        chmod +x /usr/local/bin/chromedriver
+                    '''
+                    // Install necessary library for Chrome
+                    sh 'apt-get update && apt-get install -y libnss3'
+                    // Check versions
+                    sh '''
+                        chromedriver --version
+                        google-chrome --version
+                    '''
+                }
             }
         }
+
 
         // Build the project
         stage('Build') {
