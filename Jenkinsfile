@@ -20,38 +20,38 @@ pipeline {
         }
 
       // Install Node.js
-    stage('Install Node.js') {
-        steps {
-            script {
-                def setupScript = sh(script: 'curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh', returnStdout: true)
-                echo "Setup script output: ${setupScript}"
-                def runSetup = sh(script: 'bash nodesource_setup.sh', returnStdout: true)
-                echo "Run setup output: ${runSetup}"
-                def installNode = sh(script: 'apt-get install -y nodejs', returnStdout: true)
-                echo "Node.js install output: ${installNode}"
-            }
-        }
-    }
+    // stage('Install Node.js') {
+    //     steps {
+    //         script {
+    //             def setupScript = sh(script: 'curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh', returnStdout: true)
+    //             echo "Setup script output: ${setupScript}"
+    //             def runSetup = sh(script: 'bash nodesource_setup.sh', returnStdout: true)
+    //             echo "Run setup output: ${runSetup}"
+    //             def installNode = sh(script: 'apt-get install -y nodejs', returnStdout: true)
+    //             echo "Node.js install output: ${installNode}"
+    //         }
+    //     }
+    // }
 
 
 
-        // Install Node.js dependencies (for Next.js)
-        stage('Install Node.js Dependencies') {
-            steps {
-                dir('my-app') {
-                    sh 'npm install'
-                }    
-            }
-        }
+    //     // Install Node.js dependencies (for Next.js)
+    //     stage('Install Node.js Dependencies') {
+    //         steps {
+    //             dir('my-app') {
+    //                 sh 'npm install'
+    //             }    
+    //         }
+    //     }
 
-        // Build the Next.js project
-        stage('Build') {
-            steps {
-                dir('my-app') {
-                    sh 'npm run build'
-                }
-            }
-        }
+    //     // Build the Next.js project
+    //     stage('Build') {
+    //         steps {
+    //             dir('my-app') {
+    //                 sh 'npm run build'
+    //             }
+    //         }
+    //     }
 
         // Set up Python environment and install dependencies
         stage('Setup Python Environment') {
