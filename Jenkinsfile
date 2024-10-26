@@ -19,15 +19,17 @@ pipeline {
             }
         }
 
-        // Install Node.js
-       stage('Install Node.js') {
+      // Install Node.js
+        stage('Install Node.js') {
             steps {
                 sh '''
-                    curl -sL https://deb.nodesource.com/setup_14.x | bash -
+                    curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
+                    bash nodesource_setup.sh
                     apt-get install -y nodejs
                 '''
             }
         }
+
 
         // Install Node.js dependencies (for Next.js)
         stage('Install Node.js Dependencies') {
