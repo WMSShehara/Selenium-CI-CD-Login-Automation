@@ -20,15 +20,19 @@ pipeline {
         }
 
       // Install Node.js
-        stage('Install Node.js') {
-            steps {
-                sh '''
-                    curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
-                    bash nodesource_setup.sh
-                    apt-get install -y nodejs
-                '''
+    stage('Install Node.js') {
+        steps {
+            script {
+                def setupScript = sh(script: 'curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh', returnStdout: true)
+                echo "Setup script output: ${setupScript}"
+                def runSetup = sh(script: 'bash nodesource_setup.sh', returnStdout: true)
+                echo "Run setup output: ${runSetup}"
+                def installNode = sh(script: 'apt-get install -y nodejs', returnStdout: true)
+                echo "Node.js install output: ${installNode}"
             }
         }
+    }
+
 
 
         // Install Node.js dependencies (for Next.js)
