@@ -20,11 +20,12 @@ pipeline {
         }
 
         // Install Node.js dependencies (for Next.js)
-        stage('Install Node.js Dependencies') {
+        stage('Install Node.js') {
             steps {
-                dir('my-app') {
-                    sh 'npm install'
-                }    
+                sh '''
+                    curl -sL https://deb.nodesource.com/setup_14.x | bash -
+                    apt-get install -y nodejs
+                '''
             }
         }
 
