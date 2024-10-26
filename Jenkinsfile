@@ -1,47 +1,38 @@
 pipeline {
-   
+    agent {
+        docker {
+            image 'python:3.9'
+            args '-u root'
+        }
     }
 
-     environment {
+    environment {
         HOME = "${env.WORKSPACE}"
+        PYTHON_VENV = "SHEHARA_venv"
     }
 
     stages {
-        // Checkout code from GitHub
         stage('Checkout') {
-            agent any
             steps {
                 cleanWs() // Clean workspace before build
                 git url: 'https://github.com/WMSShehara/Selenium-CI-CD-Login-Automation.git', branch: 'main'
             }
         }
 
-        // Install ChromeDriver
-       stage('Install ChromeDriver') {
-        agent {
-                docker {
-                    image 'python:3.9'
-                    args '-u root'
-                }
-        steps {
-            sh 'wget -q -O /tmp/chromedriver_linux64.zip https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.99/linux64/chromedriver-linux64.zip'
-            echo 'Unzipping chromedriver_linux64.zip...'
-            sh 'unzip -d /tmp /tmp/chromedriver_linux64.zip'
-            echo 'Moving chromedriver to /usr/local/bin...'
-            sh 'mv /tmp/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver'
-            echo 'Setting permissions for chromedriver...'
-            sh 'chmod +x /usr/local/bin/chromedriver'
-            echo 'ChromeDriver version:'
-        }
-    }
-        // Build the project
-        stage('Build') {
-            agent {
-                docker {
-                    image 'python:3.9'
-                    args '-u root'
-                }
+        stage('Install ChromeDriver') {
+            steps {
+                sh '''
+                    wget -q -O /tmp/chromedriver_linux64.zip https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.99/linux64/chromedriver-linux64.zip
+                    unzip -d /tmp /tmp/chromedriver_linux64.zip
+                    mv /tmp/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
+                    chmod +x /usr/local/bin/chromedriver
+                    echo "ChromeDriver version: $(chromedriver --version)"
+                '''
+                sh 'apt-get update && apt-get install -y libnss3'
             }
+        }
+
+        stage('Build') {
             steps {
                 script {
                     sh '''
@@ -57,31 +48,21 @@ pipeline {
             }
         }
 
-        // Run Python Selenium tests
         stage('Run Selenium Tests') {
-            agent {
-                docker {
-                    image 'python:3.9'
-                    args '-u root'
-                }
-            }
             steps {
                 dir('selenium_testing') {
-                    // Print Python version for verification
-                    sh '. $PYTHON_VENV/bin/activate && python3 --version'
-
-                    // Run Selenium tests within the virtual environment
-                    sh '. $PYTHON_VENV/bin/activate && python3 -m unittest discover -s . -p "*.py"'
+                    sh '''
+                        . $PYTHON_VENV/bin/activate
+                        python3 --version
+                        python3 -m unittest discover -s . -p "*.py"
+                    '''
                 }
             }
         }
-
     }
 
-    // Post-build actions 
     post {
         always {
-            // Clean up workspace after build
             cleanWs()
         }
 
