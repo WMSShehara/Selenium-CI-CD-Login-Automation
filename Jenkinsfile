@@ -23,7 +23,9 @@ pipeline {
         //  Build the Next.js project
         stage('Build') {
             steps {
+                dir('my-app') {
                 sh 'npm run build'
+                }
             }
         }
 
@@ -31,7 +33,9 @@ pipeline {
         // Run Python Selenium tests
         stage('Run Selenium Tests') {
             steps {
-                sh 'python -m unittest discover -s selenium_testing -p "*.py"'
+                dir('selenium_testing') {
+                    sh 'python -m unittest discover -s selenium_testing -p "*.py"'
+                }
             }
         }
 
