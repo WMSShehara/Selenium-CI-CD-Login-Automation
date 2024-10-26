@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.9'
+            args '-u root' // Run as root user to install packages
+        }
+    }
 
     environment {
         PYTHON_VENV = 'SHEHARA_venv'  // Virtual environment directory for Python
@@ -33,7 +38,6 @@ pipeline {
         }
 
         // Set up Python environment and install dependencies
-        // Set up Python environment and install dependencies
         stage('Setup Python Environment') {
             steps {
                 // Install required packages
@@ -48,7 +52,7 @@ pipeline {
 
                 // Install ChromeDriver
                 sh '''
-                    CHROME_VERSION=$(google-chrome --version | grep -oP '[\d\.]+')
+                    CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
                     CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
                     wget https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
                     unzip chromedriver_linux64.zip -d /usr/local/bin/
@@ -66,15 +70,16 @@ pipeline {
                 '''
             }
         }
+
         // Run Python Selenium tests
         stage('Run Selenium Tests') {
             steps {
                 dir('selenium_testing') {
                     // Print Python version for verification
-                    sh 'python3 --version'
+                    sh '. $PYTHON_VENV/bin/activate && python3 --version'
 
                     // Run Selenium tests within the virtual environment
-                    sh '. ../$PYTHON_VENV/bin/activate && python3 -m unittest discover -s . -p "*.py"'
+                    sh '. $PYTHON_VENV/bin/activate && python3 -m unittest discover -s . -p "*.py"'
                 }
             }
         }
