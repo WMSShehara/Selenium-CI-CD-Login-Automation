@@ -21,14 +21,19 @@ pipeline {
 
         stage('Install ChromeDriver') {
             steps {
-                sh '''
-                    wget -q -O /tmp/chromedriver_linux64.zip https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.99/linux64/chromedriver-linux64.zip
-                    unzip -d /tmp /tmp/chromedriver_linux64.zip
-                    mv /tmp/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
-                    chmod +x /usr/local/bin/chromedriver
-                    echo "ChromeDriver version: $(chromedriver --version)"
+               sh '''
+                    apt-get update
+                    echo "Installing ChromeDriver"
+                    apt-get install -y wget unzip
+                    echo "Downloading ChromeDriver"
+                    wget https://chromedriver.storage.googleapis.com/94.0.4606.61/chromedriver_linux64.zip
+                    echo "Unzipping ChromeDriver"
+                    unzip chromedriver_linux64.zip
+                    chmod +x chromedriver
+                    echo "Moving ChromeDriver to /usr/local/bin"
+                    mv chromedriver /usr/local/bin/
                 '''
-                sh 'apt-get update && apt-get install -y libnss3'
+
             }
         }
 
