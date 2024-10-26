@@ -21,7 +21,7 @@ pipeline {
 
         stage('Install ChromeDriver') {
             steps {
-               sh '''
+                sh '''
                     apt-get update
                     echo "Installing ChromeDriver"
                     apt-get install -y wget unzip
@@ -33,9 +33,19 @@ pipeline {
                     echo "Moving ChromeDriver to /usr/local/bin"
                     mv chromedriver /usr/local/bin/
                 '''
-
             }
         }
+
+        stage('Setup Python Virtual Environment') {
+            steps {
+                sh '''
+                    python3 -m venv $PYTHON_VENV
+                    . $PYTHON_VENV/bin/activate
+                    pip install --upgrade pip
+                '''
+            }
+        }
+
 
         stage('Build') {
             steps {
