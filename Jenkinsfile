@@ -4,7 +4,7 @@ pipeline {
     agent {
         docker {
             image 'python:3.9'
-            args '-u root' // Run as root user to install packages
+            // args '-u root' // Run as root user to install packages
         }
     }
 
