@@ -1,11 +1,5 @@
 pipeline {
-    agent any
-
-    agent {
-        docker {
-            image 'python:3.9'
-            // args '-u root' // Run as root user to install packages
-        }
+   
     }
 
      environment {
@@ -15,6 +9,7 @@ pipeline {
     stages {
         // Checkout code from GitHub
         stage('Checkout') {
+            agent any
             steps {
                 cleanWs() // Clean workspace before build
                 git url: 'https://github.com/WMSShehara/Selenium-CI-CD-Login-Automation.git', branch: 'main'
@@ -23,6 +18,11 @@ pipeline {
 
         // Install ChromeDriver
        stage('Install ChromeDriver') {
+        agent {
+                docker {
+                    image 'python:3.9'
+                    args '-u root'
+                }
         steps {
             sh 'wget -q -O /tmp/chromedriver_linux64.zip https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.99/linux64/chromedriver-linux64.zip'
             echo 'Unzipping chromedriver_linux64.zip...'
@@ -36,6 +36,12 @@ pipeline {
     }
         // Build the project
         stage('Build') {
+            agent {
+                docker {
+                    image 'python:3.9'
+                    args '-u root'
+                }
+            }
             steps {
                 script {
                     sh '''
@@ -53,6 +59,12 @@ pipeline {
 
         // Run Python Selenium tests
         stage('Run Selenium Tests') {
+            agent {
+                docker {
+                    image 'python:3.9'
+                    args '-u root'
+                }
+            }
             steps {
                 dir('selenium_testing') {
                     // Print Python version for verification
