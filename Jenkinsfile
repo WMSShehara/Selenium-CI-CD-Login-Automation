@@ -64,13 +64,6 @@ pipeline {
             }
         }
 
-        // Deploy (optional)
-        stage('Deploy') {
-            steps {
-                sh 'echo "Deploying the application..."'
-                // Add actual deploy steps if needed, like `sh './deploy.sh'`
-            }
-        }
     }
 
     // Post-build actions 
