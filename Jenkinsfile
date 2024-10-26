@@ -6,8 +6,8 @@ pipeline {
         }
     }
 
-    environment {
-        PYTHON_VENV = 'SHEHARA_venv'  // Virtual environment directory for Python
+     environment {
+        HOME = "${env.WORKSPACE}"
     }
 
     stages {
