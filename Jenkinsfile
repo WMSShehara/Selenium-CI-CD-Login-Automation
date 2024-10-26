@@ -4,7 +4,9 @@ pipeline {
     stages {
         //  Checkout code from GitHub
         stage('Checkout') {
+            
             steps {
+                cleanWs() // Clean workspace before build
                 git url: 'https://github.com/WMSShehara/Selenium-CI-CD-Login-Automation.git', branch: 'main'
             }
         }
@@ -12,7 +14,9 @@ pipeline {
         // Install Node.js dependencies (for Next.js)
         stage('Install Node.js Dependencies') {
             steps {
-                sh 'npm install'
+                dir('my-app') {
+                    sh 'npm install'
+                }    
             }
         }
 
