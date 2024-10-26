@@ -34,9 +34,6 @@ pipeline {
             echo 'ChromeDriver version:'
         }
     }
-
-
-
         // Build the project
         stage('Build') {
             steps {
