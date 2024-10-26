@@ -7,8 +7,9 @@ The pipeline is triggered automatically whenever a change is pushed to the GitHu
 ## Prerequisites
 
 - Jenkins server
-- GitHub account and repository.
-- Git client on local machine.
+- GitHub account and repository
+- Git client on local machine
+- Vercile account
 
 
 ## Simple Login Application
