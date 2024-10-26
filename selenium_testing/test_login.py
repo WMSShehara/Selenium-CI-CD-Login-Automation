@@ -6,7 +6,7 @@ import time
 
 # Set up the driver (ensure you have the correct path)
 driver = webdriver.Chrome() 
-driver.get("http://localhost:3000")  # app's URL
+driver.get("https://selenium-ci-cd-login-automation.vercel.app/")  
 
 try:
     # Wait for the username field to be present

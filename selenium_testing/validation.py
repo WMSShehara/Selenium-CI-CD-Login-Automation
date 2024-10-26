@@ -8,7 +8,7 @@ class LoginTests(unittest.TestCase):
 
     def setUp(self):
         self.driver = webdriver.Chrome()
-        self.driver.get("http://localhost:3000")
+        self.driver.get("https://selenium-ci-cd-login-automation.vercel.app/")
 
     def test_invalid_login(self):
         driver = self.driver
