@@ -1,5 +1,10 @@
 pipeline {
-    agent any // Use any available Jenkins agent
+    agent {
+        docker {
+            image 'python:3.9'
+            args '-u root'
+        }
+    }
 
     environment {
         HOME = "${env.WORKSPACE}"
@@ -32,43 +37,44 @@ pipeline {
                 sh 'google-chrome --version'
             }
         }
+        //  stage('Build') {
+        //     steps {
+        //         script {
+        //             sh '''
+        //                 #!/bin/bash
+        //                 export PATH="${WORKSPACE}/.local/bin:$PATH"
+        //                 python3 --version
+        //                 pip install --upgrade pip
+        //                 pip install -r requirements.txt
+        //                 pip freeze
+        //             '''
+        //         }
+        //     }
+        // }
 
-        stage('Build') {
-            steps {
-                script {
-                    sh '''
-                        export PATH="${WORKSPACE}/.local/bin:$PATH"
-                        python3 --version
-                        pip install --upgrade pip
-                        pip install -r requirements.txt
-                        pip freeze
-                    '''
-                }
-            }
-        }
+        // stage('Setup Python Virtual Environment') {
+        //     steps {
+        //         sh '''
+        //             python3 -m venv $HOME/venv
+        //             . $HOME/venv/bin/activate
+        //             pip install --upgrade pip
+        //             pip install -r requirements.txt
+        //             pip freeze
+        //         '''
+        //     }
+        // }
 
-        stage('Setup Python Virtual Environment') {
-            steps {
-                sh '''
-                    python3 -m venv $HOME/venv
-                    . $HOME/venv/bin/activate
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
-                    pip freeze
-                '''
-            }
-        }
 
-        stage('Run Selenium Tests') {
-            steps {
-                dir('selenium_testing') {
-                    sh '''
-                        python3 --version
-                        python3 -m unittest discover -s . -p "*.py"
-                    '''
-                }
-            }
-        }
+        // stage('Run Selenium Tests') {
+        //     steps {
+        //         dir('selenium_testing') {
+        //             sh '''
+        //                 python3 --version
+        //                 python3 -m unittest discover -s . -p "*.py"
+        //             '''
+        //         }
+        //     }
+        // }
     }
 
     post {
