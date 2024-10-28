@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -7,13 +8,16 @@ import time
 
 # Set up Chrome options for headless mode
 options = Options()
-options.add_argument("--headless")  # Run in headless mode
-options.add_argument("--no-sandbox")  # Prevent permission issues in CI
-options.add_argument("--disable-dev-shm-usage")  # Overcome resource limitations
-options.add_argument("--remote-debugging-port=9222")  # Useful for debugging if needed
+options.add_argument("--headless")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--remote-debugging-port=9222")
 
-# Initialize the Chrome driver with options
-driver = webdriver.Chrome(options=options, executable_path='/usr/local/bin/chromedriver')
+# Set up the Chrome driver service
+service = Service('/usr/local/bin/chromedriver')
+
+# Initialize the Chrome driver with options and service
+driver = webdriver.Chrome(service=service, options=options)
 driver.get("https://selenium-ci-cd-login-automation.vercel.app/")
 
 try:
