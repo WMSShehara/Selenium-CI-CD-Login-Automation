@@ -11,12 +11,12 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                cleanWs() // Clean workspace before build
-                git url: 'https://github.com/WMSShehara/Selenium-CI-CD-Login-Automation.git', branch: 'main'
-            }
-        }
+        // stage('Checkout') {
+        //     steps {
+        //         cleanWs() // Clean workspace before build
+        //         git url: 'https://github.com/WMSShehara/Selenium-CI-CD-Login-Automation.git', branch: 'main'
+        //     }
+        // }
 
         stage('Install ChromeDriver') {
             steps {
