@@ -36,20 +36,20 @@ pipeline {
                 sh 'google-chrome --version'
             }
         }
-        //  stage('Build') {
-        //     steps {
-        //         script {
-        //             sh '''
-        //                 #!/bin/bash
-        //                 export PATH="${WORKSPACE}/.local/bin:$PATH"
-        //                 python3 --version
-        //                 pip install --upgrade pip
-        //                 pip install -r requirements.txt
-        //                 pip freeze
-        //             '''
-        //         }
-        //     }
-        // }
+         stage('Build') {
+            steps {
+                script {
+                    sh '''
+                        #!/bin/bash
+                        export PATH="${WORKSPACE}/.local/bin:$PATH"
+                        python3 --version
+                        pip install --upgrade pip
+                        pip install -r requirements.txt
+                        pip freeze
+                    '''
+                }
+            }
+        }
 
         // stage('Setup Python Virtual Environment') {
         //     steps {
