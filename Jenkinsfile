@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.9'
-            args '-u root'
-        }
-    }
+    agent any // Use any available Jenkins agent
 
     environment {
         HOME = "${env.WORKSPACE}"
@@ -37,11 +32,11 @@ pipeline {
                 sh 'google-chrome --version'
             }
         }
-         stage('Build') {
+
+        stage('Build') {
             steps {
                 script {
                     sh '''
-                        #!/bin/bash
                         export PATH="${WORKSPACE}/.local/bin:$PATH"
                         python3 --version
                         pip install --upgrade pip
@@ -63,7 +58,6 @@ pipeline {
                 '''
             }
         }
-
 
         stage('Run Selenium Tests') {
             steps {
