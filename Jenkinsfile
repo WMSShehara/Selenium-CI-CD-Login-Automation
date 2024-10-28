@@ -36,32 +36,32 @@ pipeline {
                 sh 'google-chrome --version'
             }
         }
-         stage('Build') {
-            steps {
-                script {
-                    sh '''
-                        #!/bin/bash
-                        export PATH="${WORKSPACE}/.local/bin:$PATH"
-                        python3 --version
-                        pip install --upgrade pip
-                        pip install -r requirements.txt
-                        pip freeze
-                    '''
-                }
-            }
-        }
-
-        // stage('Setup Python Virtual Environment') {
+        //  stage('Build') {
         //     steps {
-        //         sh '''
-        //             python3 -m venv $HOME/venv
-        //             . $HOME/venv/bin/activate
-        //             pip install --upgrade pip
-        //             pip install -r requirements.txt
-        //             pip freeze
-        //         '''
+        //         script {
+        //             sh '''
+        //                 #!/bin/bash
+        //                 export PATH="${WORKSPACE}/.local/bin:$PATH"
+        //                 python3 --version
+        //                 pip install --upgrade pip
+        //                 pip install -r requirements.txt
+        //                 pip freeze
+        //             '''
+        //         }
         //     }
         // }
+
+        stage('Setup Python Virtual Environment') {
+            steps {
+                sh '''
+                    python3 -m venv $HOME/venv
+                    . $HOME/venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                    pip freeze
+                '''
+            }
+        }
 
 
         // stage('Run Selenium Tests') {
