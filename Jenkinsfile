@@ -65,16 +65,16 @@ pipeline {
         }
 
 
-        // stage('Run Selenium Tests') {
-        //     steps {
-        //         dir('selenium_testing') {
-        //             sh '''
-        //                 python3 --version
-        //                 python3 -m unittest discover -s . -p "*.py"
-        //             '''
-        //         }
-        //     }
-        // }
+        stage('Run Selenium Tests') {
+            steps {
+                dir('selenium_testing') {
+                    sh '''
+                        python3 --version
+                        python3 -m unittest discover -s . -p "*.py"
+                    '''
+                }
+            }
+        }
     }
 
     post {
