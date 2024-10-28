@@ -54,8 +54,9 @@ pipeline {
         stage('Setup Python Virtual Environment') {
             steps {
                 sh '''
-                    python3 -m venv $HOME/venv
-                    . $HOME/venv/bin/activate
+                     #!/bin/bash
+                    export PATH="${WORKSPACE}/.local/bin:$PATH"
+                    python3 --version
                     pip install --upgrade pip
                     pip install -r requirements.txt
                     pip freeze
