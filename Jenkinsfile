@@ -8,45 +8,35 @@ pipeline {
 
     environment {
         HOME = "${env.WORKSPACE}"
-        PYTHON_VENV = "SHEHARA_venv"
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                cleanWs() // Clean workspace before build
-                git url: 'https://github.com/WMSShehara/Selenium-CI-CD-Login-Automation.git', branch: 'main'
-            }
-        }
+        // stage('Checkout') {
+        //     steps {
+        //         cleanWs() // Clean workspace before build
+        //         git url: 'https://github.com/WMSShehara/Selenium-CI-CD-Login-Automation.git', branch: 'main'
+        //     }
+        // }
 
         stage('Install ChromeDriver') {
             steps {
-                sh '''
-                    apt-get update
-                    echo "Installing ChromeDriver"
-                    apt-get install -y wget unzip
-                    echo "Downloading ChromeDriver"
-                    wget https://chromedriver.storage.googleapis.com/94.0.4606.61/chromedriver_linux64.zip
-                    echo "Unzipping ChromeDriver"
-                    unzip chromedriver_linux64.zip
-                    chmod +x chromedriver
-                    echo "Moving ChromeDriver to /usr/local/bin"
-                    mv chromedriver /usr/local/bin/
-                '''
+                sh 'whoami'
+                sh 'wget -q -O /tmp/chromedriver_linux64.zip https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.99/linux64/chromedriver-linux64.zip'
+                sh 'unzip -d /tmp /tmp/chromedriver_linux64.zip'
+                sh 'ls -l /tmp'
+                sh 'ls -l /tmp/chromedriver-linux64'
+                sh 'mv /tmp/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver'                
+                sh 'echo "ChromeDriver location: $(which chromedriver)"'
+                sh 'chmod +x /usr/local/bin/chromedriver'
+                sh 'apt-get update'
+                sh 'apt-get install -y libnss3'
+                sh 'chromedriver --version'
+                sh 'wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'
+                sh 'apt-get update'
+                sh 'apt-get install -y ./google-chrome-stable_current_amd64.deb'
+                sh 'google-chrome --version'
             }
         }
-
-        stage('Setup Python Virtual Environment') {
-            steps {
-                sh '''
-                    python3 -m venv $PYTHON_VENV
-                    . $PYTHON_VENV/bin/activate
-                    pip install --upgrade pip
-                '''
-            }
-        }
-
-
         stage('Build') {
             steps {
                 script {
@@ -57,17 +47,30 @@ pipeline {
                         pip install --upgrade pip
                         pip install -r requirements.txt
                         pip freeze
+                        pip show robotframework
                         ls
                     '''
                 }
             }
         }
 
+        stage('Setup Python Virtual Environment') {
+            steps {
+                sh '''
+                    python3 -m venv $HOME/venv
+                    . $HOME/venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                    pip freeze
+                '''
+            }
+        }
+
+
         stage('Run Selenium Tests') {
             steps {
                 dir('selenium_testing') {
                     sh '''
-                        . $PYTHON_VENV/bin/activate
                         python3 --version
                         python3 -m unittest discover -s . -p "*.py"
                     '''
