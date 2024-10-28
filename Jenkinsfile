@@ -20,7 +20,6 @@ pipeline {
 
         stage('Install ChromeDriver') {
             steps {
-                sh 'whoami'
                 sh 'wget -q -O /tmp/chromedriver_linux64.zip https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.99/linux64/chromedriver-linux64.zip'
                 sh 'unzip -d /tmp /tmp/chromedriver_linux64.zip'
                 sh 'ls -l /tmp'
