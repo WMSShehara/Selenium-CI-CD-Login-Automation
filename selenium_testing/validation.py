@@ -23,6 +23,7 @@ class LoginTests(unittest.TestCase):
         self.driver = webdriver.Chrome(service=service, options=options)
         self.driver.get("https://selenium-ci-cd-login-automation.vercel.app/")
 
+    # check for invalid login
     def test_invalid_login(self):
         driver = self.driver
         username_input = driver.find_element(By.NAME, "username")
@@ -40,7 +41,7 @@ class LoginTests(unittest.TestCase):
         self.assertEqual(error_message.text, "Invalid username or password")
         pass  
         
-
+    # check for empty fields
     def test_empty_fields(self):
         driver = self.driver
         driver.find_element(By.XPATH, "//button[@type='submit']").click()
@@ -67,7 +68,7 @@ class LoginTests(unittest.TestCase):
         EC.presence_of_element_located((By.ID, "msg"))
     )
         self.assertEqual(success_message.text, "Welcome!")
-        pass  # (Write your valid login test here)
+        pass  
 
     def tearDown(self):
         self.driver.quit()

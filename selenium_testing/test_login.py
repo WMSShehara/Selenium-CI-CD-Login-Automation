@@ -39,6 +39,6 @@ try:
     )
     login_button.click()
 
-    time.sleep(10)  # Keep the browser open for 10 seconds (adjust as needed for your testing)
+    time.sleep(10)  # Keep the browser open for 10 seconds
 finally:
     driver.quit()  # Close the browser after execution

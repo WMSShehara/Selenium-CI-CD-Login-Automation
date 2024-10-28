@@ -11,12 +11,6 @@ pipeline {
     }
 
     stages {
-        // stage('Checkout') {
-        //     steps {
-        //         cleanWs() // Clean workspace before build
-        //         git url: 'https://github.com/WMSShehara/Selenium-CI-CD-Login-Automation.git', branch: 'main'
-        //     }
-        // }
 
         stage('Install ChromeDriver') {
             steps {
@@ -36,21 +30,7 @@ pipeline {
                 sh 'google-chrome --version'
             }
         }
-        //  stage('Build') {
-        //     steps {
-        //         script {
-        //             sh '''
-        //                 #!/bin/bash
-        //                 export PATH="${WORKSPACE}/.local/bin:$PATH"
-        //                 python3 --version
-        //                 pip install --upgrade pip
-        //                 pip install -r requirements.txt
-        //                 pip freeze
-        //             '''
-        //         }
-        //     }
-        // }
-
+        
         stage('Setup Python Virtual Environment') {
             steps {
                 sh '''
@@ -63,7 +43,6 @@ pipeline {
                 '''
             }
         }
-
 
         stage('Run Selenium Tests') {
             steps {

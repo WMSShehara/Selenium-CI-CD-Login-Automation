@@ -2,34 +2,41 @@
 
 This simple, self studying project demonstrates a simple CI/CD pipeline using Jenkins and GitHub webhooks. 
 The pipeline is triggered automatically whenever a change is pushed to the GitHub repository,
- allowing for continuous integration and deployment (to be continued...).
+ allowing for continuous integration and deployment.
 
 ## Prerequisites
 
-- Jenkins server
-- GitHub account and repository
-- Git client on local machine
-- Vercile account
+- Jenkins server: set up Jenkins on a server.
+- GitHub repository: publish the application and test scripts in GitHub repository.
+- Vercile account: deploy the the NextJS app on serveless Vercile host service.
 
 
 ## Simple Login Application
 The application used in this project is a simple login system built to demonstrate basic authentication functionality.
  It consists of a user interface where users can input their credentials (username and password).
 
+ ![Simple Login Application](images/loginapp.jpg)
+
  ## Features
  - Login Validation: The app checks for valid user inputs and returns appropriate success or error messages based on login success or failure.
  - Input Error Handling: The app provides feedback for invalid inputs, such as empty fields or incorrect credentials.
- - User Authentication: Simulates a basic user authentication flow where valid users are granted access and invalid users are prompted to retry
 
  ## Techniques 
 
-- Jenkins: Jenkins is an open-source automation server that orchestrates the CI/CD pipeline. 
-   It runs automated builds and tests every time new code is pushed to the repository.
-- GitHub Webhooks: Webhooks are used to trigger Jenkins builds automatically when changes are made to the GitHub repository. 
-    This ensures that the CI/CD process is initiated as soon as a developer commits code.
-- Pipeline Script: The project uses a Jenkinsfile that defines the stages of the pipeline, 
-    such as pulling the latest code, running tests, and preparing the application for deployment.
-- Automated Testing: The pipeline includes test stages to ensure that the new code does not break the build. 
-    These tests can be automated using testing frameworks like Selenium for UI tests or unit test frameworks for backend validation.
-- Continuous Deployment: While this stage is yet to be implemented, 
-    the pipeline will eventually deploy the tested code to a staging or production environment, streamlining the release process.
+- Jenkins: Jenkins serves as the core of the CI/CD pipeline, handling build automation, testing, and orchestrating various stages of the development lifecycle. Every time new  code is pushed to GitHub, Jenkins automatically runs the pipeline, ensuring continuous integration.
+- GitHub Webhooks: Webhooks trigger the Jenkins build whenever changes are made to the repository, initiating the CI/CD process immediately upon each commit, ensuring smooth collaboration and rapid testing.
+- Pipeline Script: A Jenkinsfile is used to define each stage of the pipeline, which includes:
+        -- Checkout: Pulls the latest code from the GitHub repository.
+        -- Build: Installs dependencies and prepares the code.
+        -- Testing: Runs automated tests (using Selenium) to verify functionality.
+        -- Deployment: (not implemented yet), the pipeline is structured for future deployment to staging or production environments.
+- Automated Testing with Selenium: The pipeline integrates Selenium-based automated tests to validate UI functionality. Tests are triggered automatically as part of the pipeline, reducing manual testing efforts and catching issues early in the development process.
+- Continuous Deployment (CD): While currently under development, this stage will eventually automate the deployment of validated code to Vercel or other environments, making the release process faster and more reliable.
+
+![Jenkin Pipeline](images/pipeline_test.jpg)
+
+## Future Improvements
+
+- Full Continuous Deployment: Implement automatic deployment to production after successful testing.
+- Expanded Test Coverage: Increase the range and depth of automated tests to improve reliability
+- Notification System: Set up notifications for build status, alerts, or deployment results.
